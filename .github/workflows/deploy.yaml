@@ -19,15 +19,11 @@ jobs:
           mkdir dist
           echo "Hello, world!" > dist/hello.txt
 
+
       - name: Install WinRM
         run: |
-          # Install WinRM client
-
-          powershell.exe Install-Module -Name PowerShellGet -Force
-          powershell.exe Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-          powershell.exe Install-Module -Name Microsoft.PowerShell.Collector -Repository PSGallery -Force
-          powershell.exe Install-Module -Name Microsoft.PowerShell.SecretManagement -Repository PSGallery -Force
-          powershell.exe Install-Module -Name Microsoft.PowerShell.SecretStore -Repository PSGallery -Force
+          if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
+          Enable-PSRemoting -Force
           
 
       - name: Deploy artifacts
