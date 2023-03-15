@@ -32,7 +32,7 @@ jobs:
           WINRM_HOST: ${{ secrets.WINRM_HOST }}
           WINRM_USER: ${{ secrets.WINRM_USER }}
           WINRM_PASSWORD: ${{ secrets.WINRM_PASSWORD }}
-          WINRM_DESTINATION: 'C:\path\to\destination'
+          WINRM_DESTINATION: 'C:\'
         run: |
           # Create WinRM session
           $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
