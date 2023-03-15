@@ -25,6 +25,9 @@ jobs:
           if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
           Enable-PSRemoting -Force
           }
+          Test-NetConnection 13.49.231.50 -Port 5985
+          Test-WSMan -ComputerName 13.49.231.50
+
           
 
       - name: Deploy artifacts
