@@ -36,6 +36,8 @@ jobs:
           WINRM_DESTINATION: 'C:\'
         run: |
           # Create WinRM session
+          winrm s winrm/config/client '@{TrustedHosts="13.49.231.50"}'
+
           $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential ($env:WINRM_USER, $securePassword)
           $session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
