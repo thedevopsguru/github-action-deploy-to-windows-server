@@ -25,8 +25,6 @@ jobs:
           if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
           Enable-PSRemoting -Force
           }
-          Test-NetConnection 13.49.231.50 -Port 5985
-          Test-WSMan -ComputerName 13.49.231.50
 
           
 
@@ -40,7 +38,7 @@ jobs:
           # Create WinRM session
           $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential ($env:WINRM_USER, $securePassword)
-          $session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential -Authentication Negotiate -UseSSL
+          $session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
 
           # Copy artifacts to destination
           Copy-Item -Path $env:GITHUB_WORKSPACE\dist\* -Destination $env:WINRM_DESTINATION -ToSession $session
