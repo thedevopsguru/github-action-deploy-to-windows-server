@@ -23,9 +23,13 @@ jobs:
       - name: Install WinRM
         run: |
           # Install WinRM client
-          powershell.exe Install-Module -Name Microsoft.PowerShell.Collector -Force
-          powershell.exe Install-Module -Name Microsoft.PowerShell.SecretManagement -Force
-          powershell.exe Install-Module -Name Microsoft.PowerShell.SecretStore -Force
+
+          powershell.exe Install-Module -Name PowerShellGet -Force
+          powershell.exe Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+          powershell.exe Install-Module -Name Microsoft.PowerShell.Collector -Repository PSGallery -Force
+          powershell.exe Install-Module -Name Microsoft.PowerShell.SecretManagement -Repository PSGallery -Force
+          powershell.exe Install-Module -Name Microsoft.PowerShell.SecretStore -Repository PSGallery -Force
+          
 
       - name: Deploy artifacts
         env:
