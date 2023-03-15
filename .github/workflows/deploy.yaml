@@ -1,47 +1,72 @@
-name: Deploy to Windows server
+name: Share data between jobs
+
 on:
   push:
     branches:
-      - main
+      - suman-deploy
 
 jobs:
-  deploy:
+  job_1:
+    name: Add 3 and 7
     runs-on: windows-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Build and package
+      - shell: bash
         run: |
-          # run your build commands here
-          # generate the artifacts in a directory, e.g. dist/
-          mkdir dist
-          echo "Hello, world!" > dist/hello.txt
+          expr 3 + 7 > math-homework.txt
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v3
+        with:
+          name: homework
+          path: math-homework.txt
 
+  job_2:
+    name: Multiply by 9
+    needs: job_1
+    runs-on: windows-latest
+    steps:
+      - name: Download math result for job 1
+        uses: actions/download-artifact@v3
+        with:
+          name: homework
+      - shell: bash
+        run: |
+          value=`cat math-homework.txt`
+          expr $value \* 9 > math-homework.txt
+      - name: Upload math result for job 2
+        uses: actions/upload-artifact@v3
+        with:
+          name: homework
+          path: math-homework.txt
 
+  job_3:
+    name: Display results
+    needs: job_2
+    runs-on: windows-latest
+    steps:
+      - name: Download math result for job 2
+        uses: actions/download-artifact@v3
+        with:
+          name: homework
+      - name: Print the final result
+        shell: bash
+        run: |
+          value=`cat math-homework.txt`
+          echo The result is $value
       - name: Install WinRM
         run: |
           if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
           Enable-PSRemoting -Force
           }
 
-          
-
       - name: Deploy artifacts
         env:
-          WINRM_HOST: "13.49.231.50"
+          WINRM_HOST: "16.170.210.149"
           WINRM_USER: "Administrator"
-          WINRM_PASSWORD: "xmDVC?&h@4bXen)C3E.&f&Ap9ZvnIbU9"
+          WINRM_PASSWORD: "72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA"
           WINRM_DESTINATION: 'C:\'
         run: |
           # Create WinRM session
-          winrm s winrm/config/client '@{TrustedHosts="13.49.231.50"}'
-
-          #Set-Item WSMan:\localhost\Client\TrustedHosts -Value $env:WINRM_HOST -Force
-          #$session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
-          #$session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential -UseSSL
-
+          winrm s winrm/config/client '@{TrustedHosts="16.170.210.149"}'
 
           $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential ($env:WINRM_USER, $securePassword)
