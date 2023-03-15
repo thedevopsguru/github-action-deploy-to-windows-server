@@ -24,6 +24,7 @@ jobs:
         run: |
           if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
           Enable-PSRemoting -Force
+          }
           
 
       - name: Deploy artifacts
