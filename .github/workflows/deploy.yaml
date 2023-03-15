@@ -32,9 +32,9 @@ jobs:
 
       - name: Deploy artifacts
         env:
-          WINRM_HOST: ${{ secrets.WINRM_HOST }}
-          WINRM_USER: ${{ secrets.WINRM_USER }}
-          WINRM_PASSWORD: ${{ secrets.WINRM_PASSWORD }}
+          WINRM_HOST: "ec2-13-49-231-50.eu-north-1.compute.amazonaws.com"
+          WINRM_USER: "Administrator"
+          WINRM_PASSWORD: "xmDVC?&h@4bXen)C3E.&f&Ap9ZvnIbU9"
           WINRM_DESTINATION: 'C:\'
         run: |
           # Create WinRM session
