@@ -65,13 +65,16 @@ jobs:
 
       - name: Deploy artifacts
         env:
-          WINRM_HOST: "16.170.210.149"
+          WINRM_HOST: "ec2-16-170-210-149.eu-north-1.compute.amazonaws.com"
           WINRM_USER: "Administrator"
           WINRM_PASSWORD: "72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA"
           WINRM_DESTINATION: 'C:\'
         run: |
+          Test-Connection -ComputerName "EC2AMAZ-7FCPKT7"
+          Test-NetConnection -ComputerName "EC2AMAZ-7FCPKT7" -Port 5985
+          
           # Create WinRM session
-          winrm s winrm/config/client '@{TrustedHosts="16.170.210.149"}'
+          winrm s winrm/config/client '@{TrustedHosts="ec2-16-170-210-149.eu-north-1.compute.amazonaws.com"}'
 
           $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential ($env:WINRM_USER, $securePassword)
