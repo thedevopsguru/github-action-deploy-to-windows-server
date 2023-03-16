@@ -63,7 +63,6 @@ jobs:
           Restart-Service -Name WinRM
 
 
-
       - name: Deploy artifacts
         env:
           WINRM_HOST: "16.170.210.149"
