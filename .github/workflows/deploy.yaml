@@ -1,46 +1,41 @@
-name: Deploy to Windows server
+name: Deploy to Windows Server
+
 on:
   push:
     branches:
-      - main
+      - final-working
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: [self-hosted,ubuntu-latest]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Build and package
-        run: |
-          # run your build commands here
-          # generate the artifacts in a directory, e.g. dist/
-          mkdir dist
-          echo "Hello, world!" > dist/hello.txt
+    - name: Generate SSH key pair
+      run: |
+        ssh-keygen -t ed25519 -N "" -f ssh_key
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+      shell: bash
 
+    - name: Store SSH private key
+      uses: machine-learning-apps/store-secret-action@v2
+      with:
+        secret-name: SSH_PRIVATE_KEY
+        secret-value: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Install WinRM
-        run: |
-          if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
-          Enable-PSRemoting -Force
-          }
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-          
+    - name: Build project
+      run: |
+	     expr 3 + 7 > ./math-homework.txt
 
-      - name: Deploy artifacts
-        env:
-          WINRM_HOST: "16.170.210.149"
-          WINRM_USER: "Administrator"
-          WINRM_PASSWORD: "72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA"
-          WINRM_DESTINATION: 'C:\'
-        run: |
-          # Create WinRM session
-          winrm s winrm/config/client '@{TrustedHosts="16.170.210.149"}'
-
-          $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
-          $credential = New-Object System.Management.Automation.PSCredential ($env:WINRM_USER, $securePassword)
-          $session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
-
-          # Copy artifacts to destination
-          Copy-Item -Path $env:GITHUB_WORKSPACE\dist\* -Destination $env:WINRM_DESTINATION -ToSession $session
+    - name: Deploy to Windows Server
+      uses: appleboy/scp-action@master
+      with:
+        host: 16.170.210.149
+        username: Administrator
+        key: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
+        port: 22
+        source: ./math-homework.txt
+        target: C:\
