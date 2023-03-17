@@ -7,35 +7,27 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted]
+    runs-on: [self-hosted,ubuntu:latest]
 
     steps:
 
     - name: Generate SSH key pair
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: |
+          ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Create SSH Key Pair
       run: |
-        ssh-keygen -t ed25519 -N "" -f ssh_key
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+        ssh-keygen -t ed25519 -N "" -f ./ssh_key
       shell: bash
 
     - name: Store SSH private key
-      uses: machine-learning-apps/store-secret-action@v2
-      with:
-        secret-name: SSH_PRIVATE_KEY
-        secret-value: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Build project
-      run: |
-        expr 3 + 7 > ./math-homework.txt
-
-    - name: Deploy to Windows Server
       uses: appleboy/scp-action@master
       with:
         host: 16.170.210.149
         username: Administrator
-        key: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
-        source: ./math-homework.txt
+        source: ./ssh_key
         target: C:\
