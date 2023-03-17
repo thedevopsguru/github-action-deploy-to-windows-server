@@ -25,6 +25,10 @@ jobs:
           if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
           Enable-PSRemoting -Force
           }
+          Get-Service -Name WinRM
+          Enable-PSRemoting -Force
+          Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LocalAccountTokenFilterPolicy -Value 1
+          Restart-Service -Name WinRM
 
           
 
