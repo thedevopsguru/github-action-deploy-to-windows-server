@@ -30,13 +30,13 @@ jobs:
 
       - name: Deploy artifacts
         env:
-          WINRM_HOST: "13.49.231.50"
+          WINRM_HOST: "16.170.210.149"
           WINRM_USER: "Administrator"
-          WINRM_PASSWORD: "xmDVC?&h@4bXen)C3E.&f&Ap9ZvnIbU9"
+          WINRM_PASSWORD: "72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA"
           WINRM_DESTINATION: 'C:\'
         run: |
           # Create WinRM session
-          winrm s winrm/config/client '@{TrustedHosts="13.49.231.50"}'
+          winrm s winrm/config/client '@{TrustedHosts="16.170.210.149"}'
 
           #Set-Item WSMan:\localhost\Client\TrustedHosts -Value $env:WINRM_HOST -Force
           #$session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
