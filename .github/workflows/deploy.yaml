@@ -1,51 +1,51 @@
-name: Deploy to Windows server
+name: Deploy to Windows Server
+
 on:
   push:
     branches:
-      - main
+      - dummy
 
 jobs:
-  deploy:
-    runs-on: windows-latest
 
+
+  job_1:
+    name: Add 3 and 7
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Build and package
+      - shell: bash
         run: |
-          # run your build commands here
-          # generate the artifacts in a directory, e.g. dist/
-          mkdir dist
-          echo "Hello, world!" > dist/hello.txt
+          expr 3 + 7 > math-homework.txt
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v3
+        with:
+          name: homework
+          path: math-homework.txt
 
-
-      - name: Install WinRM
+  job_2:
+    name: Multiply by 9
+    needs: job_1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download math result for job 1
+        uses: actions/download-artifact@v3
+        with:
+          name: homework
+      - shell: bash
         run: |
-          if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
-          Enable-PSRemoting -Force
-          }
-
-          
-
-      - name: Deploy artifacts
-        env:
-          WINRM_HOST: "13.49.231.50"
-          WINRM_USER: "Administrator"
-          WINRM_PASSWORD: "xmDVC?&h@4bXen)C3E.&f&Ap9ZvnIbU9"
-          WINRM_DESTINATION: 'C:\'
-        run: |
-          # Create WinRM session
-          winrm s winrm/config/client '@{TrustedHosts="13.49.231.50"}'
-
-          #Set-Item WSMan:\localhost\Client\TrustedHosts -Value $env:WINRM_HOST -Force
-          #$session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
-          #$session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential -UseSSL
-
-
-          $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
-          $credential = New-Object System.Management.Automation.PSCredential ($env:WINRM_USER, $securePassword)
-          $session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
-
-          # Copy artifacts to destination
-          Copy-Item -Path $env:GITHUB_WORKSPACE\dist\* -Destination $env:WINRM_DESTINATION -ToSession $session
+          value=`cat math-homework.txt`
+          expr $value \* 9 > math-homework.txt
+      - name: Upload math result for job 2
+        uses: actions/upload-artifact@v3
+        with:
+          name: homework
+          path: math-homework.txt
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Copy file to server
+      run: |
+        echo "$PASSWORD" | scp -o StrictHostKeyChecking=no -r math-homework.txt Administrator@16.170.210.149:C:\
+      env:
+        PASSWORD: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
