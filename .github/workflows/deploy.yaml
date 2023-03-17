@@ -28,7 +28,7 @@ jobs:
 
     - name: Build project
       run: |
-	     expr 3 + 7 > ./math-homework.txt
+	 expr 3 + 7 > ./math-homework.txt
 
     - name: Deploy to Windows Server
       uses: appleboy/scp-action@master
