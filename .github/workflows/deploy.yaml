@@ -7,14 +7,14 @@ on:
 
 jobs:
 
-
   job_1:
     name: Add 3 and 7
     runs-on: ubuntu-latest
     steps:
-      - shell: bash
+      - name: Create math-homework.txt
         run: |
-          expr 3 + 7 > math-homework.txt
+          echo "3 + 7 =" > math-homework.txt
+          expr 3 + 7 >> math-homework.txt
       - name: Upload math result for job 1
         uses: actions/upload-artifact@v3
         with:
@@ -30,22 +30,24 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: homework
-      - shell: bash
+      - name: Multiply by 9
         run: |
-          value=`cat math-homework.txt`
+          value=$(cat math-homework.txt)
           expr $value \* 9 > math-homework.txt
       - name: Upload math result for job 2
         uses: actions/upload-artifact@v3
         with:
           name: homework
           path: math-homework.txt
+
   deploy:
     runs-on: ubuntu-latest
+    needs: job_2
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Copy file to server
-      run: |
-        echo "$PASSWORD" | scp -o StrictHostKeyChecking=no -r math-homework.txt Administrator@16.170.210.149:C:\
-      env:
-        PASSWORD: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Copy file to server
+        run: |
+          sudo apt-get update
+          sudo apt-get install sshpass
+          echo "72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA" | sshpass scp -o StrictHostKeyChecking=no -r math-homework.txt Administrator@16.170.210.149:C:\
