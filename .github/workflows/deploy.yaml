@@ -25,10 +25,6 @@ jobs:
           if(!(Test-Path C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSRemoting)) {
           Enable-PSRemoting -Force
           }
-          Get-Service -Name WinRM
-          Enable-PSRemoting -Force
-          Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LocalAccountTokenFilterPolicy -Value 1
-          Restart-Service -Name WinRM
 
           
 
@@ -41,11 +37,6 @@ jobs:
         run: |
           # Create WinRM session
           winrm s winrm/config/client '@{TrustedHosts="16.170.210.149"}'
-
-          #Set-Item WSMan:\localhost\Client\TrustedHosts -Value $env:WINRM_HOST -Force
-          #$session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential
-          #$session = New-PSSession -ComputerName $env:WINRM_HOST -Credential $credential -UseSSL
-
 
           $securePassword = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential ($env:WINRM_USER, $securePassword)
