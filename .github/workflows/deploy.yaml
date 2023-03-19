@@ -19,10 +19,11 @@ jobs:
 
        
     - name: Connect to Windows server and Deploy
-      uses: peaceiris/actions-windows-ssh@v2
+      uses: mxschmitt/action-ssh@v3
       with:
         host: 16.170.210.149
         user: Administrator
         password: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
+        port: 22
         source: math-homework.txt
         target: C:\
