@@ -17,6 +17,12 @@ jobs:
       run: |
         expr 3 + 7 > math-homework.txt
 
+    - name: Add SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
     - name: Connect to Windows server and Deploy
       uses: appleboy/ssh-action@master
       with:
