@@ -22,7 +22,8 @@ jobs:
       with:
         host: 16.170.210.149
         username: Administrator
-        key: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
         source: math-homework.txt
         target: C:\
 
