@@ -1,4 +1,5 @@
-name: Deploy to Windows server
+name: Deploy to Windows Server
+
 on:
   push:
     branches:
@@ -6,25 +7,27 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Build and package
-        run: |
-          # run your build commands here
-          mkdir dist
-          echo "Hello, world!" > hello.txt
-
+    - name: Build project
+      run: |
+        expr 3 + 7 > math-homework.txt
         
-      - name: Push artifacts
-        uses: appleboy/scp-action@master
-        with:
-          host: "16.170.210.149"
-          username: "Administrator"
-          password: "72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA"
-          source: hello.txt
-          target: C:\
+    - name: Add SSH key
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
+    - name: Connect to Windows server and Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: 16.170.210.149
+        username: Administrator
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        source: math-homework.txt
+        target: C:\
