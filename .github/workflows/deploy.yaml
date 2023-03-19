@@ -24,7 +24,6 @@ jobs:
         port: 22
         username: Administrator
         key: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
-        passphrase: none
         source: math-homework.txt
         target: C:\
 
