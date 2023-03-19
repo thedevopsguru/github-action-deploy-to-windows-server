@@ -25,7 +25,7 @@ jobs:
     - name: Connect to Windows server and Deploy
       uses: appleboy/ssh-action@master
       with:
-        host: 16.170.210.149
+        host: <windows-ip>
         username: Administrator
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
