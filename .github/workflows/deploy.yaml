@@ -19,7 +19,7 @@ jobs:
 
        
     - name: Connect to Windows server and Deploy
-      uses: mxschmitt/action-ssh@v3
+      uses: appleboy/ssh-action@master
       with:
         host: 16.170.210.149
         user: Administrator
