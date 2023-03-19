@@ -19,7 +19,7 @@ jobs:
 
        
     - name: Connect to Windows server and Deploy
-      uses: BrandonBlancher/remote-desktop@v1.0.0
+      uses: p-rick/rdp-action@v1.0
       with:
         host: 16.170.210.149
         user: Administrator
