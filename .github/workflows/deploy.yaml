@@ -24,6 +24,6 @@ jobs:
         host: 16.170.210.149
         user: Administrator
         password: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
-        port: 22
+        #port: 22
         source: math-homework.txt
         target: C:\
