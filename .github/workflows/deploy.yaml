@@ -18,23 +18,11 @@ jobs:
         expr 3 + 7 > math-homework.txt
 
        
-    #- name: Generate SSH key pair
-      #uses: webfactory/ssh-agent@v0.5.0
-      #with:
-        #ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-
-    #- name: Create SSH Key Pair
-     # run: |
-      #  ssh-keygen -t ed25519 -N "" -f ./ssh_key
-      #shell: bash
-
-    - name: Store SSH private key
-      uses: appleboy/scp-action@master
+    - name: Connect to Windows server and Deploy
+      uses: BrandonBlancher/remote-desktop@v1.0.0
       with:
         host: 16.170.210.149
-        username: Administrator
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
+        user: Administrator
+        password: 72sy!LuHfoRsVS=xhsl$.OWvBbEZTfrA
         source: math-homework.txt
         target: C:\
